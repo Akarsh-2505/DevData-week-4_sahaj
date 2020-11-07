@@ -1,0 +1,74 @@
+---
+title: "Analysis of the mtcars DB"
+author: "Sahajr"
+date: "7th november 2020"
+output:
+  html_document:
+    number_sections: yes
+    toc: yes
+  slidy_presentation: default
+  ioslides_presentation: default
+mode: selfcontained
+job: Reproducible Pitch Presentation
+subtitle: Variables and MPG
+highlighter: highlight.js
+widgets: bootstrap
+---
+
+## Coursera Reproducible Pitch
+
+---
+
+## mtcars Dataset
+
+### Motor Trend Car Road Tests
+
+> The extraction of this data has been done from a US magazine known as Motor Trend and it comprises of the fuel consumptions and other 10 aspects of vehicular design and perf. for 32 different vehicles(1973-74 models).
+
+### Source
+> Biometrics, 37, 391-411, Building regression models interactively, Henderson and Vellman(1981)
+
+```{r}
+library(datasets)
+head(mtcars, 3)
+```
+---
+
+## mtcars Dataset - Format
+
+**Number of observations 32, 11 variables.**
+
+| Index | Field | Detail |
+------- | ----- | ------ |
+| [, 1] | m | Miles/ gallon |
+| [, 2]  | c | Nu of cylinders |
+| [, 3]	| d | Displ (cu.in.) |
+| [, 4]	| h |  brake horsepower |
+| [, 5]	| r | Rear axle ratio |
+| [, 6]	| we | Weit (lb/1000) |
+| [, 7]	| qu | 1/4 mile time |
+| [, 8]	| v | V/S |
+| [, 9]	| g | geartrans. (0 = auto, 1 = man) |
+| [,10]	| gfr |  forwardgears |
+| [,11]	| cbr | carburetors |
+
+---
+
+## Analysis - Main Code
+
+```r
+  formulaTextPoint <- reactive({
+    paste("mpg ~", "as.integer(", input$variable, ")")  })
+  
+  fit <- reactive({
+    lm(as.formula(formulaTextPoint()), data=mpgData)  })
+  ...
+  output$fit <- renderPrint({
+    summary(fit()) })
+  
+  output$mpgPlot <- renderPlot({
+    with(mpgData, {
+      plot(as.formula(formulaTextPoint()))
+      abline(fit(), col=2)
+    })  })
+```
